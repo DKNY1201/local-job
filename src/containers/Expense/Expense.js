@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
-import './Expense.css';
+import classes from './Expense.css';
 
 class Expense extends Component {
     render() {
         return (
-            <h1 className="header">This is Expense container</h1>
+          <form>
+
+          </form>
         );
     }
 }

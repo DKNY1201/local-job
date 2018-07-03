@@ -1,12 +1,22 @@
 import React, {Component} from 'react';
-import './Layout.css';
+import classes from './Layout.css';
+import Header from '../../components/UI/Header/Header';
+import Footer from '../../components/UI/Footer/Footer';
 
 class Layout extends Component {
-    render() {
-        return (
-            <h1 className="header">This is layout container</h1>
-        );
-    }
+  render() {
+    return (
+      <div className="container">
+        <div className="row">
+          <Header/>
+          {
+            this.props.children
+          }
+          <Footer/>
+        </div>
+      </div>
+    )
+  }
 }
 
 export default Layout;
