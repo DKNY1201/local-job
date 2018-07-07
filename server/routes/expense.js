@@ -27,4 +27,27 @@ router.post('/', (req, res, next) => {
 	})
 });
 
+router.get('/', (req, res, next) => {
+	Expense.find({}, (err, expenses) => {
+		if (err) {
+			return res.status(500).json({
+				title: 'Error happened when fetching Expenses',
+				error: err
+			});
+		}
+
+		if (expenses) {
+			return res.status(200).json({
+				message: 'Expenses found',
+				expenses: expenses
+			});
+		}
+
+		return res.json({
+			message: 'Expenses not found',
+			expenses: null
+		});
+	});
+});
+
 module.exports = router;
