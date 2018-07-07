@@ -8,12 +8,12 @@ const mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var expense = require('./routes/expense');
-var utils = require('./shared/utility');
+var utils = require('./shared/utilities');
 
 var app = express();
 
 // Connect database
-mongoose.connect(utils.MONGO_DB_SERVER_URL)
+mongoose.connect(utils.MONGO_DB_SERVER_URL, { useNewUrlParser: true })
 	.then(res => console.log(res))
 	.catch(err => console.log(err));
 
@@ -36,7 +36,6 @@ app.use(function (req, res, next) {
 app.enable('case sensitive routing');
 app.set('x-powered-by', false);
 
-console.log('12121');
 app.use('/api', index);
 app.use('/api/expense', expense);
 
