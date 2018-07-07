@@ -5,8 +5,8 @@ const initState = {
         {
             id: 1,
             type: 'fixed',
-            value: 1800,
-            name: 'Student Loan',
+            amount: 1800,
+            reason: 'Student Loan',
             date: '06/01/2018',
             description: '',
             category: 'study'
@@ -14,8 +14,8 @@ const initState = {
         {
             id: 2,
             type: 'fixed',
-            value: 300,
-            name: 'Car Loan',
+	        amount: 300,
+	        reason: 'Car Loan',
             date: '06/01/2018',
             description: '',
             category: 'life'
@@ -23,8 +23,8 @@ const initState = {
         {
             id: 3,
             type: 'flexible',
-            value: 20,
-            name: 'Starbucks',
+	        amount: 20,
+	        reason: 'Starbucks',
             date: '06/01/2018',
             description: 'with MUM friends',
             category: 'for_fun'

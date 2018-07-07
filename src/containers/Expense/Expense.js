@@ -1,14 +1,13 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import FormGroup from '@material-ui/core/FormGroup';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import Button from '@material-ui/core/Button';
+import {connect} from 'react-redux';
+import * as actions from '../../store/actions';
 
 const styles = theme => ({
 	container: {
@@ -24,49 +23,113 @@ const styles = theme => ({
 	selectEmpty: {
 		marginTop: theme.spacing.unit * 2,
 	},
+	textField: {
+		marginLeft: theme.spacing.unit,
+		marginRight: theme.spacing.unit,
+		width: 200,
+	},
 });
 
-const currencies = [
+const types = [
 	{
-		value: 'USD',
-		label: '$',
+		value: 'fixed',
+		label: 'Fixed'
 	},
 	{
-		value: 'EUR',
-		label: '€',
-	},
-	{
-		value: 'BTC',
-		label: '฿',
-	},
-	{
-		value: 'JPY',
-		label: '¥',
-	},
+		value: 'flexible',
+		label: 'Flexible'
+	}
 ];
 
-class ComposedTextField extends React.Component {
+const categories = [
+	{
+		value: 'personal',
+		label: 'Personal'
+	},
+	{
+		value: 'house',
+		label: 'House'
+	},
+	{
+		value: 'food-drink',
+		label: 'Food & Drink'
+	},
+	{
+		value: 'transport',
+		label: 'Transport'
+	},
+	{
+		value: 'clothes',
+		label: 'Clothes'
+	},
+	{
+		value: 'fun',
+		label: 'Fun'
+	},
+	{
+		value: 'misc',
+		label: 'Miscellaneous'
+	}
+];
+
+class Expense extends Component {
 	state = {
-		name: 'Composed TextField',
 		form: {
-			type: ''
+			type: 'fixed',
+			amount: '',
+			reason: '',
+			date: '',
+			description: '',
+			category: 'personal',
 		}
 	};
 
-	handleChange = event => {
-		this.setState({name: event.target.value});
-	};
+	constructor() {
+		super();
 
-	handleSelectType = event => {
-		this.setState({
-			form: {
-				type: event.target.value
-			}
-		})
 	}
 
-	handleSubmit = () => {
+	componentDidMount() {
+		this.setState({
+			...this.state,
+			form: {
+				...this.state.form,
+				date: this.getToday()
+			}
+		});
+	}
 
+	handleChange = event => {
+		this.setState({
+			...this.state,
+			form: {
+				...this.state.form,
+				[event.target.name]: event.target.value
+			}
+		});
+	};
+
+	handleSubmit = (event) => {
+		event.preventDefault();
+		console.log('submitted');
+		this.props.addExpense(this.state.form);
+	}
+
+	getToday = () => {
+		const today = new Date();
+		const year = today.getFullYear();
+		let month = (today.getMonth() + 1);
+		let date = today.getDate();
+
+		if (month < 10) {
+			month = '0' + month;
+		}
+
+		if (date < 10) {
+			date = '0' + date;
+		}
+
+		return year + '-' + month + '-' + date;
 	}
 
 	render() {
@@ -74,93 +137,140 @@ class ComposedTextField extends React.Component {
 
 		return (
 			<div className={classes.container}>
-				<form className="classes.form" onsubmit={this.handleSubmit}>
+				<h3>Add new Expense</h3>
+				<form className="classes.form" onSubmit={this.handleSubmit}>
 					<FormGroup>
-						<FormControl required className={classes.formControl}>
-							<InputLabel htmlFor="type">Type</InputLabel>
-							<Select
-								value={this.state.form.type}
-								onChange={this.handleSelectType}
-								id="type"
-								name="type"
-								className={classes.selectEmpty}
-							>
-								<MenuItem value={'fixed'}>Fixed</MenuItem>
-								<MenuItem value={'flexible'}>Flexible</MenuItem>
-							</Select>
-							<FormHelperText>Required</FormHelperText>
-						</FormControl>
-					</FormGroup>
-
-					<FormGroup>
-						<FormControl required className={classes.formControl}>
-							<InputLabel htmlFor="amount">Amount</InputLabel>
-							<Input id="amount" name="amount" value="adds" onChange=""/>
-						</FormControl>
-					</FormGroup>
-
-					<FormGroup>
-						<FormControl required className={classes.formControl}>
-							<InputLabel htmlFor="For">For</InputLabel>
-							<Input id="for" name="for" value="adds" onChange=""/>
-						</FormControl>
+						<TextField
+							id="type"
+							name="type"
+							select
+							required
+							label="Select Type"
+							className={classes.textField}
+							value={this.state.form.type}
+							onChange={this.handleChange}
+							helperText="Please select expense type"
+							margin="normal"
+						>
+							{types.map(option => (
+								<MenuItem key={option.value} value={option.value}>
+									{option.label}
+								</MenuItem>
+							))}
+						</TextField>
 					</FormGroup>
 
 					<FormGroup>
 						<TextField
-							id="date"
-							label="Date"
-							type="date"
-							defaultValue="2017-05-24"
+							required
+							name="amount"
+							label="Amount"
+							placeholder="Enter amount"
 							className={classes.textField}
-							InputLabelProps={{
-								shrink: true,
+							margin="normal"
+							type="number"
+							value={this.state.form.amount}
+							onChange={this.handleChange}
+							InputProps={{
+								startAdornment: <InputAdornment position="start">$</InputAdornment>
 							}}
 						/>
 					</FormGroup>
 
 					<FormGroup>
 						<TextField
-							id="description"
-							label="Description"
-							defaultValue="Enter Description"
+							required
+							name="reason"
+							label="Reason"
+							placeholder="Enter reason"
+							value={this.state.form.reason}
+							onChange={this.handleChange}
 							className={classes.textField}
 							margin="normal"
-						  multiline
+						/>
+					</FormGroup>
+
+					<FormGroup>
+						<TextField
+							required
+							name="date"
+							label="Date"
+							type="date"
+							value={this.state.form.date}
+							onChange={this.handleChange}
+							className={classes.textField}
+						/>
+					</FormGroup>
+
+					<FormGroup>
+						<TextField
+							name="description"
+							label="Description"
+							placeholder="Enter Description"
+							value={this.state.form.description}
+							onChange={this.handleChange}
+							className={classes.textField}
+							margin="normal"
+							multiline
 							rows="4"
 						/>
 					</FormGroup>
 
-					<TextField
-						id="select-currency"
-						select
-						label="Select"
-						className={classes.textField}
-						value={this.state.currency}
-						// onChange={this.handleChange('currency')}
-						SelectProps={{
-							MenuProps: {
-								className: classes.menu,
-							},
-						}}
-						helperText="Please select your currency"
-						margin="normal"
-					>
-						{currencies.map(option => (
-							<MenuItem key={option.value} value={option.value}>
-								{option.label}
-							</MenuItem>
-						))}
-					</TextField>
-
+					<FormGroup>
+						<TextField
+							name="category"
+							select
+							required
+							label="Select"
+							className={classes.textField}
+							value={this.state.form.category}
+							onChange={this.handleChange}
+							SelectProps={{
+								MenuProps: {
+									className: classes.menu,
+								},
+							}}
+							helperText="Please select expense category"
+							margin="normal"
+						>
+							{categories.map(option => (
+								<MenuItem key={option.value} value={option.value}>
+									{option.label}
+								</MenuItem>
+							))}
+						</TextField>
+					</FormGroup>
+					<Button type="submit" variant="contained" color="primary">
+						Add Expense
+					</Button>
 				</form>
+
+				<div>
+					{
+						this.props.expenses.map(
+							expense => expense.reason
+						)
+					}
+				</div>
 			</div>
 		);
 	}
 }
 
-ComposedTextField.propTypes = {
+Expense.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ComposedTextField);
+const mapStateToProps = state => {
+	return {
+		expenses: state.expense.expenses
+	}
+}
+
+const mapDispatchToProps = dispatch => {
+	return {
+		addExpense: (expense) => dispatch(actions.addExpense(expense))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Expense));
