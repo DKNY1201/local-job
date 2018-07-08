@@ -1,8 +1,9 @@
 import React from 'react';
+import NavBar from '../NavBar/NavBar';
 
 const header = (props) => {
   return (
-    <h1>this is header</h1>
+    <NavBar/>
   );
 }
 

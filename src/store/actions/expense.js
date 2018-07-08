@@ -45,7 +45,6 @@ export const initFetchingExpense = () => {
 		dispatch(startLoading());
 		axios.get('')
 			.then(res => {
-				console.log(res);
 				dispatch(fetchExpenseSuccess(res.data.expenses));
 			})
 			.catch(err => {

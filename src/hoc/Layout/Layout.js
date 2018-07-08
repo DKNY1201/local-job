@@ -8,15 +8,13 @@ class Layout extends Component {
   render() {
     return (
       <div className="container">
-        <Grid container spacing={24} alignContent="center">
+        <Grid container spacing={24} alignContent="center" justify="center">
           <Grid item xs={12} >
-            <div className="row">
               <Header/>
 		          {
 			          this.props.children
 		          }
               <Footer/>
-            </div>
           </Grid>
         </Grid>
       </div>

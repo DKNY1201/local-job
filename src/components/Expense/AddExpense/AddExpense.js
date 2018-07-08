@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import {connect} from 'react-redux';
 import * as actions from '../../../store/actions';
 import * as utils from '../../../shared/utils';
+import * as data from '../../../shared/data';
 
 const styles = theme => ({
 	container: {
@@ -31,57 +32,15 @@ const styles = theme => ({
 	},
 });
 
-const types = [
-	{
-		value: 'fixed',
-		label: 'Fixed'
-	},
-	{
-		value: 'flexible',
-		label: 'Flexible'
-	}
-];
-
-const categories = [
-	{
-		value: 'personal',
-		label: 'Personal'
-	},
-	{
-		value: 'house',
-		label: 'House'
-	},
-	{
-		value: 'food-drink',
-		label: 'Food & Drink'
-	},
-	{
-		value: 'transport',
-		label: 'Transport'
-	},
-	{
-		value: 'clothes',
-		label: 'Clothes'
-	},
-	{
-		value: 'fun',
-		label: 'Fun'
-	},
-	{
-		value: 'misc',
-		label: 'Miscellaneous'
-	}
-];
-
 class AddExpense extends Component {
 	state = {
 		form: {
-			type: 'fixed',
+			type: data.types[0].value,
 			amount: '',
 			reason: '',
 			date: '',
 			description: '',
-			category: 'personal',
+			category: data.categories[0].value,
 		}
 	};
 
@@ -130,7 +89,7 @@ class AddExpense extends Component {
 							helperText="Please select expense type"
 							margin="normal"
 						>
-							{types.map(option => (
+							{data.types.map(option => (
 								<MenuItem key={option.value} value={option.value}>
 									{option.label}
 								</MenuItem>
@@ -211,7 +170,7 @@ class AddExpense extends Component {
 							helperText="Please select expense category"
 							margin="normal"
 						>
-							{categories.map(option => (
+							{data.categories.map(option => (
 								<MenuItem key={option.value} value={option.value}>
 									{option.label}
 								</MenuItem>

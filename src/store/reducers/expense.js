@@ -30,7 +30,6 @@ const reducer = (state = initState, action) => {
 				loading: false
 			};
 		case actionTypes.FETCH_EXPENSE_SUCCESS:
-			console.log(action.expenses);
 			return {
 				...state,
 				expenses: action.expenses,
