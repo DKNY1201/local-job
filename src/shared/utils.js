@@ -14,3 +14,13 @@ export const getToday = () => {
 
 	return year + '-' + month + '-' + date;
 }
+
+
+export const formatDate = (date) => {
+	const dateEles = date.split('-');
+	const year = dateEles[0];
+	const month = dateEles[1];
+	const day = dateEles[2];
+
+	return [month, day, year].join('/');
+}
