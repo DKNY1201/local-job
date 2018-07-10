@@ -15,14 +15,9 @@ import * as utils from '../../shared/utils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import AddExpense from '../../components/Expense/AddExpense/AddExpense';
+import {Route, Switch} from 'react-router-dom';
+import ComponentDialog from '../../components/UI/ComponentDialog/ComponentDialog';
 
 const CustomTableCell = withStyles(theme => ({
 	head: {
@@ -54,8 +49,6 @@ class Expense extends PureComponent {
 	state = {
 		fixedExpenses: [],
 		flexibleExpenses: [],
-		open: false,
-
 	}
 
 	componentDidMount() {
@@ -93,8 +86,13 @@ class Expense extends PureComponent {
 		this.setState({ open: false });
 	};
 
+	handleEditExpense = (id) => {
+		this.props.history.push(this.props.match.url + '/edit/' + id);
+	}
+
 	render() {
 		const {classes} = this.props;
+		console.log('expense', this.props);
 
 		return (
 			<Fragment>
@@ -123,7 +121,7 @@ class Expense extends PureComponent {
 												<CustomTableCell>{expense.description}</CustomTableCell>
 												<CustomTableCell>{data.categories.find(cat => cat.value === expense.category).label}</CustomTableCell>
 												<CustomTableCell>
-													<IconButton className={classes.button} aria-label="Edit" color="primary" onClick={this.handleOpenDialog}>
+													<IconButton className={classes.button} aria-label="Edit" color="primary" onClick={() => this.handleEditExpense(expense._id)}>
 														<EditIcon />
 													</IconButton>
 													<IconButton className={classes.button} aria-label="Delete" color="primary">
@@ -173,24 +171,13 @@ class Expense extends PureComponent {
 					</Paper>
 				</Grid>
 
-				<Dialog
-					open={this.state.open}
-					onClose={this.handleCloseDialog}
-					aria-labelledby="form-dialog-title"
-				>
-					<DialogTitle id="form-dialog-title">Subscribe</DialogTitle>
-					<DialogContent>
-						<AddExpense />
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={this.handleCloseDialog} color="primary">
-							Cancel
-						</Button>
-						<Button onClick={this.handleCloseDialog} color="primary">
-							Subscribe
-						</Button>
-					</DialogActions>
-				</Dialog>
+				<Switch>
+					<Route path={this.props.match.url + '/edit/:id'} component={
+						() => <ComponentDialog component={AddExpense}/>
+					} />
+				</Switch>
+
+
 			</Fragment>
 		);
 	}

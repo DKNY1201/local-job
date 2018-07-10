@@ -9,6 +9,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import {NavLink} from 'react-router-dom';
 
 const styles = {
     root: {
@@ -50,8 +51,15 @@ class MenuAppBar extends Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="title" color="inherit" className={classes.flex}>
-                            Title
+                            <NavLink to="/">Home</NavLink>
                         </Typography>
+                        <Typography variant="title" color="inherit" className={classes.flex}>
+                            <NavLink to="/expenses">Expense</NavLink>
+                        </Typography>
+                        <Typography variant="title" color="inherit" className={classes.flex}>
+                            <NavLink to="/add-expense">Add Expense</NavLink>
+                        </Typography>
+
                         {auth && (
                             <div>
                                 <IconButton

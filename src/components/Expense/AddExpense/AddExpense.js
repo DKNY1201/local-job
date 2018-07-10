@@ -44,7 +44,7 @@ class AddExpense extends Component {
 		}
 	};
 
-	componentDidMount() {
+	componentWillMount() {
 		this.setState({
 			...this.state,
 			form: {
@@ -70,6 +70,7 @@ class AddExpense extends Component {
 	}
 
 	render() {
+		console.log('add expense', this.props);
 		const {classes} = this.props;
 
 		return (
@@ -190,11 +191,11 @@ AddExpense.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => {
-	return {
-		expenses: state.expense.expenses
-	}
-}
+// const mapStateToProps = state => {
+// 	return {
+// 		expenses: state.expense.expenses
+// 	}
+// }
 
 const mapDispatchToProps = dispatch => {
 	return {
@@ -202,4 +203,4 @@ const mapDispatchToProps = dispatch => {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(AddExpense));
+export default connect(null, mapDispatchToProps)(withStyles(styles)(AddExpense));
