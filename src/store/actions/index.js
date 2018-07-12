@@ -1,1 +1,1 @@
-export {initAddingExpense, initFetchingExpense} from './expense';
+export {initAddingExpense, initFetchingExpense, initFetchExpenseByID} from './expense';

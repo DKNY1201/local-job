@@ -1,4 +1,4 @@
-import React, {Component, Fragment, PureComponent} from 'react';
+import React, {Component, Fragment} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux';
@@ -15,7 +15,7 @@ import * as utils from '../../shared/utils';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import AddExpense from '../../components/Expense/AddExpense/AddExpense';
+import AddEditExpense from '../../components/Expense/AddEditExpense/AddEditExpense';
 import {Route, Switch} from 'react-router-dom';
 import ComponentDialog from '../../components/UI/ComponentDialog/ComponentDialog';
 
@@ -45,11 +45,11 @@ const styles = theme => ({
 	},
 });
 
-class Expense extends PureComponent {
+class Expense extends Component {
 	state = {
 		fixedExpenses: [],
 		flexibleExpenses: [],
-	}
+	};
 
 	componentDidMount() {
 		this.props.onInitFetchingExpense();
@@ -88,11 +88,10 @@ class Expense extends PureComponent {
 
 	handleEditExpense = (id) => {
 		this.props.history.push(this.props.match.url + '/edit/' + id);
-	}
+	};
 
 	render() {
 		const {classes} = this.props;
-		console.log('expense', this.props);
 
 		return (
 			<Fragment>
@@ -173,7 +172,7 @@ class Expense extends PureComponent {
 
 				<Switch>
 					<Route path={this.props.match.url + '/edit/:id'} component={
-						() => <ComponentDialog component={AddExpense}/>
+						() => <ComponentDialog component={AddEditExpense} edit title="Edit expense"/>
 					} />
 				</Switch>
 

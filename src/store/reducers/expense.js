@@ -5,6 +5,7 @@ const initState = {
 	totalFixExpenses: 0,
 	totalFlexibleExpenses: 0,
 	totalExpenses: 0,
+	editingExpense: null,
   error: null,
 	loading: false
 }
@@ -33,6 +34,12 @@ const reducer = (state = initState, action) => {
 			return {
 				...state,
 				expenses: action.expenses,
+				loading: false
+			};
+		case actionTypes.FETCH_EXPENSE_BY_ID_SUCCESS:
+			return {
+				...state,
+				editingExpense: action.expense,
 				loading: false
 			};
 		default:

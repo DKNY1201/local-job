@@ -52,3 +52,19 @@ export const initFetchingExpense = () => {
 			})
 	}
 }
+
+export const fetchExpenseByIDSuccess = (expense) => {
+	return {
+		type: actionTypes.FETCH_EXPENSE_BY_ID_SUCCESS,
+		expense: expense
+	}
+}
+
+export const initFetchExpenseByID = (expenseID) => {
+	return dispatch => {
+		dispatch(startLoading());
+		axios.get(`/${expenseID}`)
+			.then(res => dispatch(fetchExpenseByIDSuccess(res.data.expense)))
+			.catch(err => dispatch(loadingFail(err)));
+	}
+}

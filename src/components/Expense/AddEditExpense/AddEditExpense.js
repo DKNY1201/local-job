@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -10,6 +10,7 @@ import {connect} from 'react-redux';
 import * as actions from '../../../store/actions';
 import * as utils from '../../../shared/utils';
 import * as data from '../../../shared/data';
+import {withRouter} from 'react-router-dom';
 
 const styles = theme => ({
 	container: {
@@ -32,16 +33,18 @@ const styles = theme => ({
 	},
 });
 
-class AddExpense extends Component {
+class AddExpense extends PureComponent {
 	state = {
 		form: {
+			id: null,
 			type: data.types[0].value,
 			amount: '',
 			reason: '',
 			date: '',
 			description: '',
 			category: data.categories[0].value,
-		}
+		},
+		edit: false
 	};
 
 	componentWillMount() {
@@ -50,8 +53,23 @@ class AddExpense extends Component {
 			form: {
 				...this.state.form,
 				date: utils.getToday()
-			}
+			},
+			edit: this.props.edit
 		});
+	}
+
+	componentDidMount() {
+		if (this.state.edit) {
+			this.props.onFetchExpenseByID(this.props.match.params.id);
+		}
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (this.state.edit && this.state.form.id !== nextProps.expense._id) {
+			this.setState({
+				form: nextProps.expense
+			})
+		}
 	}
 
 	handleChange = event => {
@@ -70,12 +88,9 @@ class AddExpense extends Component {
 	}
 
 	render() {
-		console.log('add expense', this.props);
 		const {classes} = this.props;
-
 		return (
 			<div className={classes.container}>
-				<h3>Add new Expense</h3>
 				<form className="classes.form" onSubmit={this.handleSubmit}>
 					<FormGroup>
 						<TextField
@@ -191,16 +206,17 @@ AddExpense.propTypes = {
 	classes: PropTypes.object.isRequired,
 };
 
-// const mapStateToProps = state => {
-// 	return {
-// 		expenses: state.expense.expenses
-// 	}
-// }
-
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
 	return {
-		onAddExpense: (expense) => dispatch(actions.initAddingExpense(expense))
+		expense: state.expense.editingExpense
 	}
 }
 
-export default connect(null, mapDispatchToProps)(withStyles(styles)(AddExpense));
+const mapDispatchToProps = dispatch => {
+	return {
+		onAddExpense: (expense) => dispatch(actions.initAddingExpense(expense)),
+		onFetchExpenseByID: (expenseID) => dispatch(actions.initFetchExpenseByID(expenseID))
+	}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(withRouter(AddExpense)));

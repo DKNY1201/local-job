@@ -4,7 +4,7 @@ import Expense from "./containers/Expense/Expense";
 import Layout from './hoc/Layout/Layout';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import {Switch, Route, Redirect} from 'react-router-dom';
-import AddExpense from './components/Expense/AddExpense/AddExpense';
+import AddExpense from './components/Expense/AddEditExpense/AddEditExpense';
 
 class App extends Component {
   render() {

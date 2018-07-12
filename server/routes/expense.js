@@ -50,4 +50,27 @@ router.get('/', (req, res, next) => {
 	});
 });
 
+router.get('/:id', (req, res, next) => {
+	Expense.findById(req.params.id, (err, expense) => {
+		if (err) {
+			return res.status(500).json({
+				title: 'Error happened when fetching Expense by id ' + req.params.id,
+				error: err
+			});
+		}
+
+		if (expense) {
+			return res.status(200).json({
+				message: 'Expense found',
+				expense: expense
+			});
+		}
+
+		return res.json({
+			message: `Expense with ${eq.params.id} not found`,
+			expense: null
+		});
+	});
+});
+
 module.exports = router;
